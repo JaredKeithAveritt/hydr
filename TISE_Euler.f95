@@ -4,7 +4,7 @@ Program TISE_Euler
     ! looking at radial part
     
     implicit none
-    
+
     integer,parameter :: numsteps = 1E5 !***wht is maxsteps 1E7 the largest value before i get an error? 
     double precision, dimension(0:numsteps) :: Veff, potl, centrifugal, r, U , UP, UPP
     double precision :: Sum=0.0, Rydberg=0.5, Energy, tau , hbar=1.0 , mass=1.0 , e=1.0 , k=1.0 ,Zr,lr,nr ! tau = size of increments , h = planks constant
@@ -14,7 +14,7 @@ Program TISE_Euler
     character :: namevar2*40 , namevar*40, nvar*2, lvar*2, zvar*2  !16 
     
     double precision :: Pi=3.14159265358979 ! 3238462643383279502884197169399373510
-    
+  
     !b=1000.0
     
     write(*,*)"n="
@@ -40,8 +40,7 @@ Program TISE_Euler
     U(numsteps-1) = 1.0D-150 !1.0 !
     UP(numsteps) = 0.0
     Energy=-(Rydberg*(Zr)**(2.0))/n**2
-    
-    
+
     !tau = (b - a) * numsteps**(-1.0) 
     !write(*,*) 'numsteps=' , numsteps
     !write(*,*) 'Numsteps * tau *r0 = ', tau*numsteps*r0
@@ -56,8 +55,6 @@ Program TISE_Euler
       !centrifugal(i-1) = (hbar**2.0*lr*(lr+1.0))/(2.0*mass*r(i-1)**2.0)
       !potl(i-1) = -(1.0*Zr*k*e**2.0)/r(i-1)  ! from int coulombs force
       !Veff(i-1) = potl(i-1) + centrifugal(i-1)
-    
-    
     
       if(upp(i).ne.upp(i)) then
         write(*,*) 'error, upp(i) does not equal upp(i)'
@@ -76,10 +73,10 @@ Program TISE_Euler
     
      ! UP(i-1) = UP(i) - tau * UPP(i)!Eulers
      ! U(i-1) =  U(i) - tau * UP(i) !Eulers
-      !UPP(i) = (-2.0*mass/hbar**2.0)*(Energy-Veff(i))*U(i) !Eulers
+     ! UPP(i) = (-2.0*mass/hbar**2.0)*(Energy-Veff(i))*U(i) !Eulers
     
      ! UPP(i-1) = (-2.0*mass/hbar**2.0)*(Energy-Veff(i-1))*U(i-1) ! Verlet
-      !U(i-2)=2.0*U(i-1)-U(i)+tau**(2.0)*UPP(i-1)! Verlet
+     ! U(i-2)=2.0*U(i-1)-U(i)+tau**(2.0)*UPP(i-1)! Verlet
     
       UPP(i-1) = ((-2.0*mass/hbar**2.0)*(Energy-((-(1.0*Zr*k*e**2.0)/r(i-1)) + &
       &((hbar**2.0*lr*(lr+1.0))/(2.0*mass*r(i-1)**2.0)))))*U(i-1) ! Verlet
@@ -100,7 +97,7 @@ Program TISE_Euler
     !if(l>7)then
       trunc=r0/15.0
     !endif
-    
+  
     !normailization
     sum = 0.0
     do i=numsteps,0 , -2 !Integrate from 0 -> numsteps in steps of 2
@@ -178,12 +175,10 @@ Program TISE_Euler
       open(unit=100, file=namevar)
     
     !Writing Out U's
-    
-      !write(100,*)  'r(i)     ',  'U(i)     ' ,'centrifugal(i)     ' ,'potl(i)    ', 'UPP(i)    '
+    !write(100,*)  'r(i)     ',  'U(i)     ' ,'centrifugal(i)     ' ,'potl(i)    ', 'UPP(i)    '
     do i = 0, numsteps
       write(100,*)  r(i), (4.0)*Pi*U(i)**(2.0)  !u(i)! ,centrifugal(i) ,potl(i), UPP(i)
     enddo
     close(100)
-    
-    
+
     end program TISE_Euler
